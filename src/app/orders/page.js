@@ -5,6 +5,9 @@ import { useState, useEffect } from "react";
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeReviewId, setActiveReviewId] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [reviewText, setReviewText] = useState("");
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -20,6 +23,22 @@ export default function OrderHistory() {
     };
     fetchOrders();
   }, []);
+
+  const handleSubmitReview = async (orderId) => {
+    try {
+      await fetch('/api/orders', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, rating, reviewText })
+      });
+
+      setActiveReviewId(null);
+      setRating(5);
+      setReviewText("");
+    } catch (error) {
+      console.error("Review failed");
+    }
+  };
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
@@ -48,6 +67,42 @@ export default function OrderHistory() {
                     }`}>
                       {order.status}
                     </span>
+
+                    {order.status === 'Completed' && !order.rating && activeReviewId !== order._id && (
+                      <button onClick={() => setActiveReviewId(order._id)}>
+                        ★ Leave Review
+                      </button>
+                    )}
+
+                    {order.rating && (
+                      <div>
+                        {"★".repeat(order.rating)}{"☆".repeat(5 - order.rating)}
+                        <p>"{order.reviewText}"</p>
+                      </div>
+                    )}
+
+                    {activeReviewId === order._id && (
+                      <div>
+                        <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
+                          <option value="5">5 Stars</option>
+                          <option value="4">4 Stars</option>
+                          <option value="3">3 Stars</option>
+                          <option value="2">2 Stars</option>
+                          <option value="1">1 Star</option>
+                        </select>
+
+                        <input
+                          value={reviewText}
+                          onChange={(e) => setReviewText(e.target.value)}
+                          placeholder="Write review"
+                        />
+
+                        <button onClick={() => handleSubmitReview(order._id)}>
+                          Submit
+                        </button>
+                      </div>
+                    )}
+                  
                   </div>
                 </div>
               ))}
