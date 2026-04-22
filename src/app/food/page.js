@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import FoodMap from "../../components/FoodMap";
 
 export default function FoodPage() {
   // THE MOCK DATA STAYS! (Member 1 hasn't finished the API yet)
@@ -75,6 +76,8 @@ export default function FoodPage() {
     <main className="min-h-screen p-8 bg-gray-50">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Available Surplus Food</h1>
+        <FoodMap foods={displayedFoods} />
+  
 
         {/* Member 4's Watchlist Button (Placeholder for Member 2) */}
         <div className="flex gap-4 mb-8">
