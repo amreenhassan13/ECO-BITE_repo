@@ -20,14 +20,11 @@ export default function Navbar() {
               Find Food
             </Link>
             <Link href="/orders" className="text-gray-600 hover:text-green-600 font-medium text-sm transition">My Orders</Link>
-            <Link href="/charity" className="text-gray-600 hover:text-green-600 font-medium text-sm transition">
-              Charity Bulk Claim
-            </Link>
 
             <div className="h-6 w-px bg-gray-300"></div> 
             
-            <Link href="/dashboard" className="text-gray-600 hover:text-green-600 font-medium text-sm transition">
-              Restaurant Dashboard
+            <Link href="/add-food" className="text-gray-600 hover:text-green-600 font-medium text-sm transition">
+              List Food
             </Link>
 
             <Link href="/admin" className="text-gray-600 hover:text-green-600 font-medium text-sm transition">

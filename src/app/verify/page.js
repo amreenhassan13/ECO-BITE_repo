@@ -68,8 +68,8 @@ export default function VerifyPickupPage() {
         )}
 
         <div className="mt-6 text-center">
-          <Link href="/dashboard" className="text-green-600 hover:underline text-sm font-medium">
-            &larr; Back to Dashboard
+          <Link href="/add-food" className="text-green-600 hover:underline text-sm font-medium">
+            &larr; Back to Add Food
           </Link>
         </div>
       </div>

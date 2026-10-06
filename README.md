@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Eco-Bite
 
-## Getting Started
+A surplus food rescue platform. Restaurants list food that would otherwise be thrown away at a discount, shoppers reserve it and collect it with a pickup code, and an admin approves the partner organisations.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+**Working now**
+- Partner applications for restaurants and charities (`/apply`), with admin Approve/Reject (`/admin`)
+- Restaurants can post surplus food with quantity, prices, Vegan/Halal tags and an expiry time (`/add-food`)
+- Dynamic expiry pricing: items get 20% off with under 2 hours left and 50% off with under 1 hour left
+- Reservations that reduce stock and generate a 4-digit pickup code, with a pickup verification screen (`/verify`)
+- Dietary filters, a local watchlist and a Google Map on the shopper page (`/food`)
+
+**In progress / known limitations**
+- `/food` still shows mock data and its "Reserve Now" button is not wired to the API yet
+- Review and rating submission (`PUT /api/orders`) is not implemented
+- Map pins are placed on a circle around a fixed centre, not at real restaurant locations
+- Login is a development role picker stored in the browser. There is no real authentication, so do not put sensitive data in a public deployment
+
+## Tech stack
+
+- [Next.js](https://nextjs.org) 16 (App Router) and React 19
+- Tailwind CSS 4
+- MongoDB with Mongoose 9
+- Google Maps via `@react-google-maps/api`
+
+## Project structure
+
+```
+src/
+  app/
+    page.js            Home page
+    apply/             Partner application form
+    login/             Development login (role picker)
+    admin/             Approve or reject applications
+    add-food/          Restaurants list surplus food
+    food/              Shopper view: filters, watchlist, map
+    orders/            Reservations and reviews
+    verify/            Enter a pickup code
+    api/               Backend routes: apply, admin, restaurants, food, reservations, orders
+  components/          Navbar, FoodMap
+  lib/db.js            Cached MongoDB connection
+  models/              Mongoose schemas: Restaurant, Charity, FoodItem, Reservation
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting started
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+You need Node.js 20.9 or newer and a MongoDB database (a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster works).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git clone https://github.com/amreenhassan13/ECO-BITE_repo.git
+cd ECO-BITE_repo
+npm install
+cp .env.example .env.local   # then fill in your values
+npm run dev
+```
 
-## Learn More
+Open http://localhost:3000.
 
-To learn more about Next.js, take a look at the following resources:
+### Environment variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Variable | Purpose |
+| --- | --- |
+| `MONGODB_URI` | MongoDB connection string |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps JavaScript API key |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Trying the flow
 
-## Deploy on Vercel
+1. Go to `/apply` and submit a restaurant application.
+2. Go to `/login`, choose **admin**, and approve the application on `/admin`.
+3. Log in again as **restaurant**, pick your restaurant, and list food on `/add-food`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploy on [Vercel](https://vercel.com/new) by importing the GitHub repository and adding the two environment variables above. If you use MongoDB Atlas, allow Vercel in Network Access (`0.0.0.0/0`) and add your deployed URL to the Google Maps key's allowed referrers.
+
+## Scripts
+
+- `npm run dev` starts the development server
+- `npm run build` creates a production build
+- `npm run start` runs the production build
+- `npm run lint` runs ESLint

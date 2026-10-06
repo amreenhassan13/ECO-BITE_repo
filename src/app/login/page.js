@@ -46,7 +46,7 @@ export default function LoginPage() {
     
     // Redirect them based on their role
     if (selectedRole === "admin") router.push('/admin');
-    else if (selectedRole === "restaurant") router.push('/dashboard');
+    else if (selectedRole === "restaurant") router.push('/add-food');
     else router.push('/food');
   };
 
